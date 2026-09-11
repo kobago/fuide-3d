@@ -1,17 +1,29 @@
 [package]
 name = "fuide-3d"
 description = "3D viewport for FUIDE apps: orbit camera, hologram mesh + glowing line rendering on wgpu, egui widget"
-edition.workspace = true
-version.workspace = true
-license.workspace = true
+edition = "2021"
+version = "0.1.0"
+license = "MIT"
 
 [dependencies]
-egui = { workspace = true }
+egui = "0.36.1"
 egui-wgpu = "0.36.1"
 wgpu = { version = "30", default-features = false, features = ["metal", "wgsl"] }
 bytemuck = { version = "1", features = ["derive"] }
-fuide = { workspace = true }
+# The FUI kit lives in its own repo (private for now, so SSH). Pin with `rev` / `tag` for releases.
+fuide = { git = "ssh://git@github.com/kobago/fuide" }
 
 [dev-dependencies]
-eframe = { workspace = true }
+eframe = { version = "0.36.1", default-features = false, features = ["default_fonts", "wgpu"] }
 egui_kittest = { version = "0.36.1", features = ["eframe", "wgpu", "snapshot"] }
+
+# Developing the `fuide` crate alongside this crate? Point Cargo at the sibling checkout
+# (uncomment; do not commit):
+# [patch."ssh://git@github.com/kobago/fuide"]
+# fuide = { path = "../fuide/crates/fuide" }
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
