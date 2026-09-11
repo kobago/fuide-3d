@@ -4,3 +4,4 @@
 *.diff.png
 *.new.png
 *.old.png
+/Cargo.lock
