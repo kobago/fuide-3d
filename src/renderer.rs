@@ -41,6 +41,9 @@ pub struct Style {
     /// Edges behind the fill (X-ray); 0 = hidden.
     pub hidden_alpha: f32,
     pub glow: bool,
+    /// 1 = a plain lit solid in the mesh's own colour (no hologram tint, fresnel rim or
+    /// dimming); 0 = the hologram look. Realistic views (a PCB, a part) use 1.
+    pub solid: f32,
 }
 
 impl Default for Style {
@@ -53,6 +56,7 @@ impl Default for Style {
             edge_alpha: 0.9,
             hidden_alpha: 0.0,
             glow: true,
+            solid: 0.0,
         }
     }
 }
@@ -66,6 +70,8 @@ struct Globals {
     accent: [f32; 3],
     holo_mix: f32,
     params: [f32; 4],
+    // solid, pad, pad, pad
+    params2: [f32; 4],
 }
 
 #[repr(C)]
@@ -497,6 +503,7 @@ impl Renderer {
                 size[0] as f32,
                 size[1] as f32,
             ],
+            params2: [style.solid, 0.0, 0.0, 0.0],
         };
         self.queue
             .write_buffer(&self.globals, 0, bytemuck::bytes_of(&g));

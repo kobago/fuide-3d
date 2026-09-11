@@ -4,7 +4,7 @@
 use egui::Vec2;
 use egui_kittest::Harness;
 use fuide::{theme, Palette, Panel};
-use fuide_3d::{scene, LineBatch, Scene, Vec3, ViewMode, Viewport};
+use fuide_3d::{scene, LineBatch, Scene, Style, Vec3, ViewMode, Viewport};
 
 struct Demo {
     installed: bool,
@@ -104,4 +104,26 @@ fn snapshot_wire_and_xray() {
     h.state_mut().viewport.mode = ViewMode::Xray;
     h.run_steps(2);
     h.snapshot("viewport_xray");
+}
+
+/// `style_override` with `solid: 1.0` draws the mesh in its own colour, lit, without the
+/// hologram tint, rim or scan lines (the realistic render used by FUIDE EDA).
+#[test]
+fn snapshot_solid_override() {
+    let mut h = harness();
+    let demo = h.state_mut();
+    demo.scene.meshes[0].color = [0.1, 0.55, 0.25, 1.0];
+    demo.scene.bump();
+    demo.viewport.style_override = Some(Style {
+        holo_mix: 0.0,
+        scan_strength: 0.0,
+        fill_alpha: 1.0,
+        edge_alpha: 0.0,
+        hidden_alpha: 0.0,
+        glow: false,
+        solid: 1.0,
+        ..Style::default()
+    });
+    h.run_steps(2);
+    h.snapshot("viewport_solid");
 }

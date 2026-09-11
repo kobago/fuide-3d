@@ -63,6 +63,8 @@ pub struct Viewport {
     pub last_size: [u32; 2],
     /// Fixed animation clock (snapshot tests: the scan lines must not depend on frame count).
     pub time_override: Option<f64>,
+    /// Replaces the style derived from `mode` (e.g. a realistic render: `Style { solid: 1.0, .. }`).
+    pub style_override: Option<Style>,
 }
 
 impl Default for Viewport {
@@ -80,6 +82,7 @@ impl Viewport {
             render_state: None,
             last_size: [0, 0],
             time_override: None,
+            style_override: None,
         }
     }
 
@@ -146,7 +149,7 @@ impl Viewport {
             (rect.height() * ppp).round().max(1.0) as u32,
         ];
         self.last_size = size;
-        let style = self.mode.style(pal);
+        let style = self.style_override.unwrap_or_else(|| self.mode.style(pal));
         let time = self.time_override.unwrap_or(time);
         let painter = ui.painter().with_clip_rect(rect);
         match (&mut self.renderer, &self.render_state) {
