@@ -18,8 +18,8 @@ tests/             egui_kittest のスナップショット (SHADED / WIRE / X-R
 
 ```toml
 [dependencies]
-fuide = { git = "ssh://git@github.com/kobago/fuide" }
-fuide-3d = { git = "ssh://git@github.com/kobago/fuide-3d" }
+fuide = { git = "https://github.com/kobago/fuide" }
+fuide-3d = { git = "https://github.com/kobago/fuide-3d" }
 # fuide-3d は Metal バックエンドだけを有効にする。Linux 向けの Vulkan はアプリ側で足す:
 # wgpu = { version = "30", default-features = false, features = ["vulkan", "wgsl"] }
 ```
